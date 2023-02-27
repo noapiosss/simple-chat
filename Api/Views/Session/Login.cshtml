@@ -1,0 +1,13 @@
+@{
+    ViewData["Title"] = "Login";
+    Layout = "_Layout";
+}
+
+<h4>Enter username:</h4>
+<hr />
+<form asp-action="Login">
+    <input type="text" name="username" class="form-control" placeholder="Username" aria-label="Last name" style="width: 25%;">
+    <div class="form-group">
+        <input type="submit" value="Login" class="btn btn-primary" />
+    </div>
+</form>

@@ -1,0 +1,17 @@
+@{
+    ViewData["Title"] = "Chat";
+    Layout = "_Layout";
+}
+
+<h4>Chat:</h4>
+
+<div class="chat-textarea" id="chat-textarea">Welcome!</div>
+
+<div class="send-message-form">
+    <input type="text" class="form-control" id="message" placeholder="Your message..." aria-label="Message">
+    <div class="form-group">
+        <button type="submit" value="Send" class="btn btn-primary" id="send-msg-btn">Send</button>
+    </div>
+</div>
+
+<script src="~/js/chat.js"></script>

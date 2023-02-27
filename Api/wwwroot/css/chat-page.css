@@ -1,0 +1,19 @@
+.chat-textarea
+{
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 5px;
+    width: 100%;
+    height: 600px;
+}
+
+.send-message-form
+{
+    margin-top: 10px;
+    display: flex;
+}
+
+#send-msg-btn
+{
+    margin-left: 10px;
+}
