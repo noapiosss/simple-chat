@@ -1,0 +1,32 @@
+.login-page-container{
+    width: 100%;
+    height: 80vh;
+    
+    position: relative;
+}
+
+.login-form-container{
+    border: 1px solid rgb(172, 172, 172);
+    border-radius: 10px;
+
+    padding: 20px;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#login-form{
+    display: inline-flex;
+    width: 100%;
+}
+
+#login-username{
+    width: 200px;
+}
+
+#login-btn{
+    width: 75px;
+    margin-left: 10px;
+}
