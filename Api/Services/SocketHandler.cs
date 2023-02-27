@@ -45,6 +45,11 @@ namespace Api.Services
             }
         }
 
+        public List<string> GetUsernames()
+        {
+            return Connections.GetUsernames();
+        }
+
         public abstract Task Receive(WebSocket socket, WebSocketReceiveResult result, byte[] buffer);
     }
 }

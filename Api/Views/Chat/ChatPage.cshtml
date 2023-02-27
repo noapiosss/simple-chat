@@ -3,15 +3,29 @@
     Layout = "_Layout";
 }
 
-<h4>Chat:</h4>
+<div class="chat-page-container">
 
-<div class="chat-textarea" id="chat-textarea">Welcome!</div>
+    <div class="chat-container">
 
-<div class="send-message-form">
-    <input type="text" class="form-control" id="message" placeholder="Your message..." aria-label="Message">
-    <div class="form-group">
-        <button type="submit" value="Send" class="btn btn-primary" id="send-msg-btn">Send</button>
+        <div class="users-conainer"> 
+            <h4> Users: </h4>
+            <div class="users-list" id="users-list"></div>
+        </div>
+
+        <div class="chat-field-container">
+            <h4>Chat:</h4>
+            <div class="chat-field" id="chat-field">Welcome!</div>
+        </div>
+
     </div>
+
+    <div class="send-message-form">
+        <input type="text" class="form-control" id="message" placeholder="Your message..." aria-label="Message">
+        <div class="form-group">
+            <button type="submit" value="Send" class="btn btn-primary" id="send-msg-btn">Send</button>
+        </div>
+    </div>
+
 </div>
 
 <script src="~/js/chat.js"></script>

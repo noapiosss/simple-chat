@@ -1,0 +1,17 @@
+#session-info{
+    display: inline-flex;
+    padding-left: 5px;
+}
+
+.username-session-info{
+    padding-left: 5px;
+    margin: auto;
+    margin-right: 5px;
+}
+
+#logout-link{
+    margin: auto;
+    padding: 5px;
+    border-radius: 10px;
+    text-decoration: none;
+}

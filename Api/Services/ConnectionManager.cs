@@ -37,6 +37,11 @@ namespace Api.Services
             return _connections;
         }
 
+        public List<string> GetUsernames()
+        {
+            return _connections.Keys.ToList();
+        }
+
         public string GetUsername(WebSocket socket)
         {
             return _connections.FirstOrDefault(c => c.Value == socket).Key;

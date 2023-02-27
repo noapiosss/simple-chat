@@ -1,7 +1,8 @@
-const chat = document.getElementById("chat-textarea");
+const chat = document.getElementById("chat-field");
 const msg = document.getElementById("message");
 const sendBtn = document.getElementById("send-msg-btn");
 const username = document.getElementById("username-session-info");
+const userlist = document.getElementById("users-list");
 
 const uri = "ws://localhost:5002/ws";
 
@@ -30,7 +31,18 @@ function connect() {
     };
 
     socket.onmessage = function(e) {
-        chat.innerHTML += `<br/> ${e.data}`;
-        console.log(e.data);
+        if (e.data.startsWith("userlist"))
+        {
+            let newUserlist = e.data.split(":")[1].split("&&&");
+            userlist.innerHTML = "";
+            newUserlist.forEach(user => {
+                userlist.innerHTML += `${user} <br/> `;
+            });
+        }
+        else
+        {
+            chat.innerHTML += `<br/> ${e.data}`;
+            chat.scrollTop = chat.scrollHeight - chat.clientHeight;
+        }
     }
 }

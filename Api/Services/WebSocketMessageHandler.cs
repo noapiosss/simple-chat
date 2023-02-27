@@ -13,6 +13,8 @@ namespace Api.Services
         {
             await base.OnConnected(username, socket);
             await SendMessageToAll($"<b style=\"color:green\">[{DateTime.Now:HH:mm:ss}]</b> <b>{username}</b> connected");
+
+            await SendMessageToAll($"userlist:{string.Join("&&&", GetUsernames())}");
         }
 
         public override async Task OnDisconnected(WebSocket socket)
@@ -20,6 +22,8 @@ namespace Api.Services
             string username = Connections.GetUsername(socket);
             await SendMessageToAll($"<b style=\"color:red\">[{DateTime.Now:HH:mm:ss}]</b> <b>{username}</b> disconnected");
             await base.OnDisconnected(socket);
+
+            await SendMessageToAll($"userlist:{string.Join("&&&", GetUsernames())}");
         }
 
         public override async Task Receive(WebSocket socket, WebSocketReceiveResult result, byte[] buffer)
