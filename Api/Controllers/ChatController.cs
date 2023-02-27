@@ -1,12 +1,16 @@
 using System.Security.Claims;
+using Api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
     public class ChatController : Controller
     {
-        public ChatController()
+        private readonly IUserHandler _userHandler;
+
+        public ChatController(IUserHandler userHandler)
         {
+            _userHandler = userHandler;
         }
 
         public IActionResult ChatPage(CancellationToken cancellationToken)

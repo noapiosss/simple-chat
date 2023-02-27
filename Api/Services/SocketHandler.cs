@@ -12,11 +12,6 @@ namespace Api.Services
             Connections = connections;
         }
 
-        public bool UsernameIsAlreadyInUse(string username)
-        {
-            return Connections.UsernameIsAlreadyInUse(username);
-        }
-
         public virtual async Task OnConnected(string username, WebSocket socket)
         {
             await Task.Run(() => { Connections.AddSocket(username, socket); });

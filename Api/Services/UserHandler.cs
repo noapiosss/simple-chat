@@ -5,7 +5,11 @@ namespace Api.Services
     public class UserHandler : IUserHandler
     {
         private static readonly List<string> usernames = new();
-        public bool TryLogin(string username)
+        public bool UsernameIsAlreadyInUse(string username)
+        {
+            return usernames.Contains(username);
+        }
+        public bool TryAddUser(string username)
         {
             if (usernames.Contains(username))
             {
@@ -16,9 +20,12 @@ namespace Api.Services
             return true;
         }
 
-        public void Logout(string username)
+        public void TryRemoveUser(string username)
         {
-            _ = usernames.Remove(username);
+            if (username.Contains(username))
+            {
+                _ = usernames.Remove(username);
+            }
         }
     }
 }

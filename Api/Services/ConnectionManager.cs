@@ -1,24 +1,28 @@
 using System.Collections.Concurrent;
 using System.Net.WebSockets;
+using Api.Services.Interfaces;
 
 namespace Api.Services
 {
     public class ConnectionManager
     {
         private readonly ConcurrentDictionary<string, WebSocket> _connections = new();
+        private readonly IUserHandler _userHandler;
 
-        public bool UsernameIsAlreadyInUse(string username)
+        public ConnectionManager(IUserHandler userHandler)
         {
-            return _connections.ContainsKey(username);
+            _userHandler = userHandler;
         }
 
         public void AddSocket(string username, WebSocket socket)
         {
-            _connections.TryAdd(username, socket);
+            _userHandler.TryAddUser(username);
+            _connections.TryAdd(username, socket);            
         }
 
         public async Task RemoveSocketAsync(string username)
-        {
+        {            
+            _userHandler.TryRemoveUser(username);
             _connections.TryRemove(username, out WebSocket socket);
             await socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "socket connection closed", CancellationToken.None);
         }

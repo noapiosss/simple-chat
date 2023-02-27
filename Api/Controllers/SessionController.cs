@@ -22,7 +22,7 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Login([FromForm] string username)
         {
-            if (!_userHandler.TryLogin(username))
+            if (_userHandler.UsernameIsAlreadyInUse(username))
             {
                 return Redirect($"{Request.Headers["Origin"]}/Session/Login");
             }
@@ -43,9 +43,10 @@ namespace Api.Controllers
             return Redirect($"{Request.Headers["Origin"]}/Chat/ChatPage");
         }
 
-        public async Task<IActionResult> LeaveChat()
+        public async Task<IActionResult> Logout()
         {
             string username = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value;
+
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             return Redirect($"{Request.Headers["Origin"]}/Session/Login");
