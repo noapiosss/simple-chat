@@ -16,18 +16,24 @@ namespace Api.Services
         public override async Task OnConnected(string username, WebSocket socket)
         {
             await base.OnConnected(username, socket);
+            string message = $"<b style=\"color:green\">[{DateTime.Now:HH:mm:ss}]</b> <i><b>{username}</b> has connected</i>";
 
             await SendMessage(socket, $"messageBuffer:::{string.Join("&&&", _messageBuffer.GetMessages())}");
 
-            await SendMessageToAll($"<b style=\"color:green\">[{DateTime.Now:HH:mm:ss}]</b> <b>{username}</b> connected");
+            _messageBuffer.AddMessage(message);
+            await SendMessageToAll(message);
 
-            await SendMessageToAll($"userlist::::{string.Join("&&&", GetUsernames())}");
+            await SendMessageToAll($"userlist:::{string.Join("&&&", GetUsernames())}");
         }
 
         public override async Task OnDisconnected(WebSocket socket)
         {
             string username = Connections.GetUsername(socket);
-            await SendMessageToAll($"<b style=\"color:red\">[{DateTime.Now:HH:mm:ss}]</b> <b>{username}</b> disconnected");
+            string message = $"<b style=\"color:red\">[{DateTime.Now:HH:mm:ss}]</b> <i><b>{username}</b> has disconnected</i>";
+
+            _messageBuffer.AddMessage(message);
+            await SendMessageToAll(message);
+
             await base.OnDisconnected(socket);
 
             await SendMessageToAll($"userlist:::{string.Join("&&&", GetUsernames())}");
@@ -39,7 +45,6 @@ namespace Api.Services
             string message = $"<b style=\"color:blue\">[{DateTime.Now:HH:mm:ss}]</b> <b>{username}:</b> {Encoding.UTF8.GetString(buffer, 0, result.Count)}";
 
             _messageBuffer.AddMessage(message);
-
             await SendMessageToAll(message);
         }
     }
