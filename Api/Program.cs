@@ -12,6 +12,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 builder.Services.AddWebSocketManager();
 builder.Services.AddSingleton<IUserHandler, UserHandler>();
+builder.Services.AddSingleton<IMessageBuffer, MessageBuffer>();
 
 WebApplication app = builder.Build();
 

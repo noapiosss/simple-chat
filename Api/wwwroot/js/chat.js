@@ -38,10 +38,18 @@ function connect() {
     socket.onmessage = function(e) {
         if (e.data.startsWith("userlist"))
         {
-            let newUserlist = e.data.split(":")[1].split("&&&");
+            let newUserlist = e.data.split(":::")[1].split("&&&");
             userlist.innerHTML = "";
             newUserlist.forEach(user => {
                 userlist.innerHTML += `${user} <br/> `;
+            });
+        }
+        else if (e.data.startsWith("messageBuffer"))
+        {
+            let messageBuffer = e.data.split(":::")[1].split("&&&");
+
+            messageBuffer.forEach(message => {
+                chat.innerHTML += `<br/> ${message}`;
             });
         }
         else
