@@ -7,17 +7,22 @@ const userlist = document.getElementById("users-list");
 const uri = "ws://localhost:5002/ws";
 
 connect();
+
 sendBtn.onclick = () =>
 {
     if (msg.value !== "")
     {
         socket.send(msg.value);
-        //chat.innerHTML += `<br/> <b style="color:red">[${new Date(Date.now()).toLocaleTimeString()}]</b> <b>${username.innerText}:</b> ${msg.value}`;
         msg.value = "";
     }
 }
 
-
+msg.onkeydown = (e) =>
+{
+    if (e.key == "Enter") {
+        sendBtn.click();
+    }
+}
 
 function connect() {
     socket = new WebSocket(uri);
