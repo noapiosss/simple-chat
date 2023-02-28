@@ -1,5 +1,7 @@
 using System.Net.WebSockets;
 using System.Text;
+using System.Text.Json;
+using Api.Models;
 using Api.Services.Interfaces;
 
 namespace Api.Services
@@ -16,36 +18,54 @@ namespace Api.Services
         public override async Task OnConnected(string username, WebSocket socket)
         {
             await base.OnConnected(username, socket);
-            string message = $"<b style=\"color:green\">[{DateTime.Now:HH:mm:ss}]</b> <i><b>{username}</b> has connected</i>";
+            ChatMessage message = new()
+            {
+                Username = username,
+                Time = $"{DateTime.Now:HH:mm:ss}",
+                Message = "has connected",
+                MessageType = "connectMessage"
+            };
 
-            await SendMessage(socket, $"messageBuffer:::{string.Join("&&&", _messageBuffer.GetMessages())}");
+            await SendMessage(socket, $"{{\"bufferMessages\":{JsonSerializer.Serialize(_messageBuffer.GetMessages())}}}");
 
             _messageBuffer.AddMessage(message);
-            await SendMessageToAll(message);
+            await SendMessageToAll($"{{\"systemMessage\":{JsonSerializer.Serialize(message)}}}");
 
-            await SendMessageToAll($"userlist:::{string.Join("&&&", GetUsernames())}");
+            await SendMessageToAll($"{{\"userList\":{JsonSerializer.Serialize(GetUsernames())}}}");
         }
 
         public override async Task OnDisconnected(WebSocket socket)
         {
             string username = Connections.GetUsername(socket);
-            string message = $"<b style=\"color:red\">[{DateTime.Now:HH:mm:ss}]</b> <i><b>{username}</b> has disconnected</i>";
+            ChatMessage message = new()
+            {
+                Username = username,
+                Time = $"{DateTime.Now:HH:mm:ss}",
+                Message = "has connected",
+                MessageType = "disconnectMessage"
+            };
 
             _messageBuffer.AddMessage(message);
-            await SendMessageToAll(message);
+            await SendMessageToAll($"{{\"systemMessage\":{JsonSerializer.Serialize(message)}}}");
 
             await base.OnDisconnected(socket);
 
-            await SendMessageToAll($"userlist:::{string.Join("&&&", GetUsernames())}");
+            await SendMessageToAll($"{{\"userList\":{JsonSerializer.Serialize(GetUsernames())}}}");
         }
 
         public override async Task Receive(WebSocket socket, WebSocketReceiveResult result, byte[] buffer)
         {
             string username = Connections.GetUsername(socket);
-            string message = $"<b style=\"color:blue\">[{DateTime.Now:HH:mm:ss}]</b> <b>{username}:</b> {Encoding.UTF8.GetString(buffer, 0, result.Count)}";
+            ChatMessage message = new()
+            {
+                Username = username,
+                Time = $"{DateTime.Now:HH:mm:ss}",
+                Message = Encoding.UTF8.GetString(buffer, 0, result.Count),
+                MessageType = "userMessage"
+            };
 
             _messageBuffer.AddMessage(message);
-            await SendMessageToAll(message);
+            await SendMessageToAll($"{{\"userMessage\":{JsonSerializer.Serialize(message)}}}");
         }
     }
 }

@@ -24,38 +24,83 @@ msg.onkeydown = (e) =>
     }
 }
 
-function connect() {
+function connect()
+{
     socket = new WebSocket(uri);
 
-    socket.onopen = function(e) {
-        console.log("connection opened");
+    socket.onopen = function(e)
+    {
+
     };
 
-    socket.onclose = function(e) {
-        console.log("connection closed");
+    socket.onclose = function(e)
+    {
+
     };
 
-    socket.onmessage = function(e) {
-        if (e.data.startsWith("userlist"))
+    socket.onmessage = function(e)
+    {
+        let chatMessage = JSON.parse(e.data);
+
+        if(chatMessage.hasOwnProperty("bufferMessages"))
         {
-            let newUserlist = e.data.split(":::")[1].split("&&&");
-            userlist.innerHTML = "";
-            newUserlist.forEach(user => {
-                userlist.innerHTML += `${user} <br/> `;
-            });
+            chatMessage.bufferMessages.forEach(message => { addBufferMessage(message); });
         }
-        else if (e.data.startsWith("messageBuffer"))
+        else if (chatMessage.hasOwnProperty("systemMessage"))
         {
-            let messageBuffer = e.data.split(":::")[1].split("&&&");
-
-            messageBuffer.forEach(message => {
-                chat.innerHTML += `<br/> ${message}`;
-            });
+            addSystemMessage(chatMessage.systemMessage);
+        }
+        else if (chatMessage.hasOwnProperty("userMessage"))
+        {
+            addUserMessage(chatMessage.userMessage);
         }
         else
         {
-            chat.innerHTML += `<br/> ${e.data}`;
-            chat.scrollTop = chat.scrollHeight - chat.clientHeight;
+            userlist.innerHTML = "";
+            chatMessage.userList.forEach(user => {  userlist.innerHTML += `${user} <br/> `; })
         }
     }
+}
+
+function addBufferMessage(msg)
+{
+    if (msg.MessageType == "connectMessage")
+    {
+        addConnectMessage(msg);
+    }
+    else if (msg.MessageType == "disconnectMessage")
+    {
+        addDisconnectMessage(msg);
+    }
+    else
+    {
+        addUserMessage(msg);
+    }
+}
+
+function addUserMessage(msg)
+{
+    chat.innerHTML += `<br/> <b style=\"color:blue\">[${msg.Time}]</b> <b>${msg.Username}:</b> ${msg.Message}`;
+}
+
+function addSystemMessage(msg)
+{
+    if (msg.MessageType == "connectMessage")
+    {
+        addConnectMessage(msg);
+    }
+    else
+    {
+        addDisconnectMessage(msg);
+    }
+}
+
+function addConnectMessage(msg)
+{
+    chat.innerHTML += `<br/> <b style=\"color:green\">[${msg.Time}]</b> <i><b>${msg.Username}</b> ${msg.Message}</i>`;
+}
+
+function addDisconnectMessage(msg)
+{
+    chat.innerHTML += `<br/> <b style=\"color:red\">[${msg.Time}]</b> <i><b>${msg.Username}</b> ${msg.Message}</i>`;
 }
