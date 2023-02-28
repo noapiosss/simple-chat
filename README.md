@@ -1,3 +1,3 @@
 # Simple webchat on .NET
 
-![alt text]("https://i.imgur.com/CoSCsN0.png")
+<img style="float: center;" src="https://i.imgur.com/CoSCsN0.png">
