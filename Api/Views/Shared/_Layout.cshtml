@@ -31,7 +31,7 @@
                     <span class="navbar-text" id="session-info">
                         @if(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value != null)
                         {
-                            <p class="username-session-info" id="username-session-info"> @User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value </p>
+                            <p class="username-session-info" id="username-session-info">@User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value</p>
                             <a class="logout-link" id="logout-link" href="/Session/Logout">[logout]</a>
                         }
                         else

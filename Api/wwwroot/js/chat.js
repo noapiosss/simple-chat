@@ -1,7 +1,7 @@
 const chat = document.getElementById("chat-field");
 const msg = document.getElementById("message");
 const sendBtn = document.getElementById("send-msg-btn");
-const username = document.getElementById("username-session-info");
+const ownUsername = document.getElementById("username-session-info");
 const userlist = document.getElementById("users-list");
 
 const uri = "ws://localhost:5002/ws";
@@ -57,50 +57,38 @@ function connect()
         else
         {
             userlist.innerHTML = "";
-            chatMessage.userList.forEach(user => {  userlist.innerHTML += `${user} <br/> `; })
+            chatMessage.userList.forEach(user => {  userlist.innerHTML += `<div class="user-container">${user}</div>`; })
         }
+
+        chat.scrollTop = chat.scrollHeight;
     }
 }
 
 function addBufferMessage(msg)
 {
-    if (msg.MessageType == "connectMessage")
-    {
-        addConnectMessage(msg);
-    }
-    else if (msg.MessageType == "disconnectMessage")
-    {
-        addDisconnectMessage(msg);
+    if (msg.MessageType == "userMessage")
+    {        
+        addUserMessage(msg);
     }
     else
     {
-        addUserMessage(msg);
+        addSystemMessage(msg);
     }
 }
 
 function addUserMessage(msg)
 {
-    chat.innerHTML += `<br/> <b style=\"color:blue\">[${msg.Time}]</b> <b>${msg.Username}:</b> ${msg.Message}`;
+    if (msg.Username === ownUsername.innerHTML)
+    {
+        chat.innerHTML += `<div class="own-chat-message"> <div class="own-message-text">${msg.Message}</div> <div class="own-chat-message-time">${msg.Time}</div> </div>`;
+    }
+    else
+    {
+        chat.innerHTML += `<div class="chat-message"> <div class="message-username">${msg.Username}</div> <div class=="message-text">${msg.Message}</div> <div class="chat-message-time">${msg.Time}</div> </div>`;
+    }
 }
 
 function addSystemMessage(msg)
 {
-    if (msg.MessageType == "connectMessage")
-    {
-        addConnectMessage(msg);
-    }
-    else
-    {
-        addDisconnectMessage(msg);
-    }
-}
-
-function addConnectMessage(msg)
-{
-    chat.innerHTML += `<br/> <b style=\"color:green\">[${msg.Time}]</b> <i><b>${msg.Username}</b> ${msg.Message}</i>`;
-}
-
-function addDisconnectMessage(msg)
-{
-    chat.innerHTML += `<br/> <b style=\"color:red\">[${msg.Time}]</b> <i><b>${msg.Username}</b> ${msg.Message}</i>`;
+    chat.innerHTML += `<div class="system-chat-message"> <div class="system-message-text">${msg.Username} ${msg.Message}</div> </div>` ;
 }

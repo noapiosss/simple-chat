@@ -22,7 +22,7 @@ namespace Api.Services
             {
                 Username = username,
                 Time = $"{DateTime.Now:HH:mm:ss}",
-                Message = "has connected",
+                Message = "joined chat",
                 MessageType = "connectMessage"
             };
 
@@ -41,7 +41,7 @@ namespace Api.Services
             {
                 Username = username,
                 Time = $"{DateTime.Now:HH:mm:ss}",
-                Message = "has connected",
+                Message = "left chat",
                 MessageType = "disconnectMessage"
             };
 
